@@ -1,95 +1,47 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client'; // This is required for components that need client-side rendering like chart
+
+import { useEffect, useState } from 'react';
+import RiskBar from '../components/RiskBar';
+
+// Mock function to mimic fetching data from an API
+const fetchMockRiskData = () => {
+  return new Promise((resolve) => {
+    // Simulate a network delay
+    setTimeout(() => {
+      // Sample JSON data mimicking API response
+      const sampleData = [
+        { category: 'Market Maturity', score: 6.6 },
+        { category: 'Market Situation', score: 6.3 },
+        { category: 'Competitors', score: 5.7 },
+        { category: 'Competition', score: 4.0 },
+        { category: 'Customers', score: 5.3 },
+      ];
+      resolve(sampleData);
+    }, 1000); // Simulate a 1-second delay
+  });
+};
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [riskData, setRiskData] = useState([]);
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+  useEffect(() => {
+    // Fetch mock data when the component mounts
+    fetchMockRiskData().then((data) => {
+      // Extract only the scores for the RiskBar component
+      const scores = data.map((item) => item.score);
+      setRiskData(scores);
+    });
+  }, []);
+
+  return (
+    <div>
+      <h1>Risk Evaluation Dashboard</h1>
+      {riskData.length > 0 ? (
+        <RiskBar data={riskData} />
+      ) : (
+        <p>Loading data...</p>
+      )}
     </div>
   );
 }
+
